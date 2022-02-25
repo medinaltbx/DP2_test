@@ -91,7 +91,6 @@ def edemData(output_table, project_id):
 
         #Create a fixed window (1 min duration)
         (data 
-            | "Get temperature value" >> beam.ParDo(agg_temperature())
             | "WindowByMinute" >> beam.WindowInto(window.FixedWindows(60))
             | "MeanByWindow" >> beam.CombineGlobally(MeanCombineFn()).without_defaults()
             | "Add Window ProcessingTime" >> beam.ParDo(add_processing_time())
@@ -100,4 +99,4 @@ def edemData(output_table, project_id):
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
-    edemData("iotToBigQuery","edemserverless-342118")
+    edemData("iotToBigQuery","dp2-test-342416")
