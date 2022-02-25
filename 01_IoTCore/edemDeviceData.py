@@ -533,6 +533,7 @@ def mqtt_device_demo(args):
             minimum_backoff_time *= 2
             client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
+        #TODO: Cambiar registros de tabla --> Solo los que nos interesen
         #payload = "{}/{}-payload-{}".format(args.registry_id, args.device_id, i)
         payload_device = {
             "parking_id": args.device_id,
