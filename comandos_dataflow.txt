@@ -1,0 +1,23 @@
+project_id = edemserverless-342118
+
+SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out rsa_cert.pem -subj "/CN=unused"
+
+bucket_name = edem-serverless-bucket-0
+
+gcloud builds submit --tag 'gcr.io/edemserverless-342118/dataflow/edem:latest' .
+
+gcloud dataflow flex-template build "gs://edem-serverless-bucket-0/dataflowtemplate.json" \
+  --image "gcr.io/edemserverless-342118/dataflow/edem:latest" \
+  --sdk-language "PYTHON" 
+
+gcloud dataflow flex-template run "edem-dataflow-job" \
+    --template-file-gcs-location "gs://edem-serverless-bucket-0/dataflowtemplate.json" \
+    --region "europe-west1"
+
+python edemDeviceData.py \
+    --algorithm RS256 \
+    --cloud_region europe-west1 \
+    --device_id edemDevice \
+    --private_key_file rsa_private.pem \
+    --project_id edemserverless-342118 \
+    --registry_id edemRegistry
