@@ -1,23 +1,23 @@
-project_id = edemserverless-342118
+project_id = dp2-test-342416
 
 SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out rsa_cert.pem -subj "/CN=unused"
 
-bucket_name = edem-serverless-bucket-0
+bucket_name = iot-cloud-storage-test
 
-gcloud builds submit --tag 'gcr.io/edemserverless-342118/dataflow/edem:latest' .
+gcloud builds submit --tag 'gcr.io/dp2-test-342416/dataflow/edem:latest' .
 
-gcloud dataflow flex-template build "gs://edem-serverless-bucket-0/dataflowtemplate.json" \
-  --image "gcr.io/edemserverless-342118/dataflow/edem:latest" \
+gcloud dataflow flex-template build "gs://iot-cloud-storage-test/dataflowtemplate.json" \
+  --image "gcr.io/dp2-test-342416/dataflow/edem:latest" \
   --sdk-language "PYTHON" 
 
 gcloud dataflow flex-template run "edem-dataflow-job" \
-    --template-file-gcs-location "gs://edem-serverless-bucket-0/dataflowtemplate.json" \
+    --template-file-gcs-location "gs://iot-cloud-storage-test/dataflowtemplate.json" \
     --region "europe-west1"
 
 python edemDeviceData.py \
     --algorithm RS256 \
     --cloud_region europe-west1 \
-    --device_id edemDevice \
+    --device_id parking1 \
     --private_key_file rsa_private.pem \
-    --project_id edemserverless-342118 \
+    --project_id dp2-test-342416 \
     --registry_id edemRegistry
