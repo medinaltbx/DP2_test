@@ -80,24 +80,13 @@ def edemData(output_table, project_id):
 
         #Part02: Write proccessing message to their appropiate sink
         #Data to Bigquery
-        print('SE METE LA DATA: ')
-        print(data)
+
         (data | "Write to BigQuery" >> beam.io.WriteToBigQuery(
             table = f"{project_id}:edemDataset.{output_table}",
             schema = schema,
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
             write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
         ))
-
-        #Part03: Count temperature per minute and put that data into PubSub
-
-        #Create a fixed window (1 min duration)
-        (data 
-            | "WindowByMinute" >> beam.WindowInto(window.FixedWindows(60))
-            | "MeanByWindow" >> beam.CombineGlobally(MeanCombineFn()).without_defaults()
-            | "Add Window ProcessingTime" >> beam.ParDo(add_processing_time())
-            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions", with_attributes=False)
-        )
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)

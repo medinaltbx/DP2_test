@@ -1,9 +1,11 @@
+#~#~#~#~# CREDENTIALS #~#~#~#~#
 project_id = dp2-test-342416
-
-SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out rsa_cert.pem -subj "/CN=unused"
-
 bucket_name = iot-cloud-storage-test
 
+#~#~#~#~# IOT BINDING #~#~#~#~#
+SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out rsa_cert.pem -subj "/CN=unused"
+
+#~#~#~#~# DATAFLOW PREP #~#~#~#~#
 gcloud builds submit --tag 'gcr.io/dp2-test-342416/dataflow/edem:latest' .
 
 gcloud dataflow flex-template build "gs://iot-cloud-storage-test/dataflowtemplate.json" \
