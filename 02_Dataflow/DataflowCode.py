@@ -35,23 +35,9 @@ def parse_json_message(message):
     #Convert string decoded in json format(element by element)
     row = json.loads(pubsubmessage)
 
-    #Add Processing Time (new column)
-    row["processingTime"] = str(datetime.datetime.now())
-
     #Return function
     return row
 
-class add_processing_time(beam.DoFn):
-    def process(self, element):
-        window_start = str(datetime.datetime.now())
-        output_data = {'aggTemperature': element, 'processingTime': window_start}
-        output_json = json.dumps(output_data)
-        yield output_json.encode('utf-8')
-
-class agg_temperature(beam.DoFn):
-    def process(self, element):
-        temp = element['temperature']
-        yield temp
 
 #Create Beam pipeline
 
@@ -60,7 +46,7 @@ def edemData(output_table, project_id):
     #Load schema from BigQuery/schemas folder
     with open(f"schemas/{output_table}.json") as file:
         input_schema = json.load(file)
-    
+
     #Declare bigquery schema
     schema = bigquery_tools.parse_table_schema_from_json(json.dumps(input_schema))
 
@@ -90,4 +76,3 @@ def edemData(output_table, project_id):
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
-    edemData("iotToBigQuery","dp2-test-342416")
