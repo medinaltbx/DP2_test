@@ -1,0 +1,4 @@
+- Modify dataflow to manage time between occupation
+
+- Create table for occupied parkings in bigquery --> ocupation
+
