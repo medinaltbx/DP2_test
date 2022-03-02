@@ -1,6 +1,4 @@
 parking_id,timeStamp,ocupado
-parking1,2022-03-02 10:02:36.660335,False
-parking1,2022-03-02 10:02:46.670765,True
 parking1,2022-03-02 10:02:51.675788,False
 parking1,2022-03-02 10:02:56.680747,True
 parking1,2022-03-02 10:03:01.685756,True
