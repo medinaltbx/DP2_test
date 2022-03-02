@@ -46,12 +46,9 @@ def edemData(output_table, project_id):
     #Load schema from BigQuery/schemas folder
     with open(f"schemas/{output_table}.json") as file:
         input_schema = json.load(file)
+    
     #Declare bigquery schema
     schema = bigquery_tools.parse_table_schema_from_json(json.dumps(input_schema))
-
-    # with open(f"schemas/parkingStatus.json") as file:
-    #     status_schema = json.load(file)
-    # status_schema = bigquery_tools.parse_table_schema_from_json(json.dumps(status_schema))
 
     #Create pipeline
     #First of all, we set the pipeline options
@@ -77,7 +74,6 @@ def edemData(output_table, project_id):
             write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
         ))
 
-
-
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
+    edemData("iotToBigQuery","dp2-test-342416")
