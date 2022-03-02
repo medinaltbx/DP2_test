@@ -1,0 +1,19 @@
+{
+    "fields": [
+    {
+      "mode": "NULLABLE",
+      "name": "parking_id",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "timeStamp_arrival",
+      "type": "STRING"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "timeStamp_departure",
+      "type": "STRING"
+    }
+    ]
+}

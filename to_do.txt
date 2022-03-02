@@ -2,3 +2,5 @@
 
 - Create table for occupied parkings in bigquery --> ocupation
 
+- Change iot frequency
+

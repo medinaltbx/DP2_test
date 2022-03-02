@@ -25,4 +25,4 @@ python edemDeviceData.py \
     --registry_id edemRegistry
 
 #~#~#~#~# QUERY TO GET LAST #~#~#~#~#
-SELECT * FROM `dp2-test-342416.edemDataset.iotToBigQuery` where ocupado='True' order by timeStamp desc Limit 1
+SELECT * FROM `dp2-test-342416.edemDataset.iotToBigQuery` where ocupado='True' and parking_id = 'parking1' order by timeStamp desc Limit 1
