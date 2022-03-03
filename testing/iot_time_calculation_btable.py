@@ -1,15 +1,18 @@
 import time
-from datetime import datetime
+import datetime
 
-from google.cloud import bigquery
+from google.cloud import bigtable
+from google.cloud.bigtable import column_family
+from google.cloud.bigtable import row_filters
 import pandas as pd
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=r"C:\Users\Cristian\Downloads\aparkapp_bq_private_key.json"
-TABLE ="dp2-test-342416.edemDataset.status"
+project_id ="dp2-test-342416"
+instance_id = table_id = "status"
 
 # Construct a BigQuery client object.
-client = bigquery.Client()
-job_config = bigquery.QueryJobConfig(destination=TABLE)
+client = bigtable.Client(project=project_id, admin=True)
+instance = client.instance(instance_id)
 
 df_input = pd.read_csv("testing/testing-iot.csv").to_dict('records')
 

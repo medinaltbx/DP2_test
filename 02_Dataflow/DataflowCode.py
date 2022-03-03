@@ -38,6 +38,11 @@ def parse_json_message(message):
     #Return function
     return row
 
+class FilterFn(beam.DoFn):
+    def process(self, element):
+        if (element['ocupado'] == 'salida'):
+          yield element
+
 
 #Create Beam pipeline
 
@@ -73,6 +78,13 @@ def edemData(output_table, project_id):
             create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
             write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
         ))
+
+        (data
+            | 'Filter messages' >> beam.ParDo(FilterFn())
+            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",
+                                                    with_attributes=False)
+         )
+
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
