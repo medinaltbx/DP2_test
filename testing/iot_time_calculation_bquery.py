@@ -11,7 +11,7 @@ TABLE ="dp2-test-342416.edemDataset.status"
 client = bigquery.Client()
 job_config = bigquery.QueryJobConfig(destination=TABLE)
 
-df_input = pd.read_csv(r"testing/testing-iot.csv").to_dict('records')
+df_input = pd.read_csv(r"testing/testing-iot_1.csv").to_dict('records')
 
 def upload_status(data , current_time):
 

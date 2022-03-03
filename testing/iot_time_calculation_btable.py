@@ -14,7 +14,7 @@ instance_id = table_id = "status"
 client = bigtable.Client(project=project_id, admin=True)
 instance = client.instance(instance_id)
 
-df_input = pd.read_csv("testing/testing-iot.csv").to_dict('records')
+df_input = pd.read_csv("testing/testing-iot_1.csv").to_dict('records')
 
 def upload_status(data):
 

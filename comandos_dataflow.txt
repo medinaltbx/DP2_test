@@ -23,6 +23,3 @@ python edemDeviceData.py \
     --private_key_file rsa_private.pem \
     --project_id dp2-test-342416 \
     --registry_id edemRegistry
-
-#~#~#~#~# QUERY TO GET LAST #~#~#~#~#
-SELECT * FROM `dp2-test-342416.edemDataset.iotToBigQuery` where ocupado='True' and parking_id = 'parking1' order by timeStamp desc Limit 1
