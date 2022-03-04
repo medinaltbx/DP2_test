@@ -82,10 +82,13 @@ def edemData(output_table, project_id):
 
         # Part03: Filter and publish data
 
-        (data | "Filter messages" >> beam.Filter(lambda element: element['status'] == 'salida')
-            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",
-                                                    with_attributes=False)
-        )
+        (data | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions", with_attributes=False))
+
+        #(data 
+        #    #| "Filter messages" >> beam.Filter(lambda element: element['status'] == 'salida')
+        #    | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",
+        #                                                with_attributes=False)
+        #)
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
