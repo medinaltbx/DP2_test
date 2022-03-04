@@ -85,6 +85,7 @@ def edemData(output_table, project_id):
         # Part03: Filter and publish data
         (data | "Filter messages" >> beam.Filter(lambda element: element['status'] == 'salida')
               | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",with_attributes=False)
+              | "Write to BigQuery" >> beam.io.WriteToBigQuery(table=f"{project_id}:edemDataset.{output_table}",schema=schema,create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
         )
 
 
