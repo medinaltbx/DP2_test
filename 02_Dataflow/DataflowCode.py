@@ -38,12 +38,14 @@ def parse_json_message(message):
     #Return function
     return row
 
-class filter_departures(beam.DoFn):
-    def process(self, element):
-        if (element['status'] == 'salida'):
-            yield element
-        else:
-            yield element
+# class filter_departures(beam.DoFn):
+#     def process(self, element):
+#         if (element['status'] == 'salida'):
+#             yield element
+#         else:
+#             yield element
+def is_departure(element):
+    return element['status'] == 'salida'
 
 
 #Create Beam pipeline
@@ -81,9 +83,8 @@ def edemData(output_table, project_id):
             write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND
         ))
 
-        (data
-            | 'Filter messages' >> beam.ParDo(filter_departures())
-            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",with_attributes=False)
+        (data | "Filter messages" >> beam.Filter(is_departure)
+              | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",with_attributes=False)
         )
 
 
