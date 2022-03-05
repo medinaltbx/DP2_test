@@ -90,7 +90,7 @@ def edemData(output_table, project_id):
 
         (data
             | "Parse JSON" >> beam.ParDo(parse_json())
-            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions", with_attributes=False)
+            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/IotToCloudFunctions", with_attributes=False)
          )
 
         #(data
