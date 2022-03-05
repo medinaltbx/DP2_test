@@ -1,9 +1,7 @@
 # Cloud Function triggered by PubSub Event
-# When a temperature over 23ºC or under 17ºC is received, a IoT Core command will be throw.
 
 # Import libraries
 import base64, json, sys, os
-
 
 
 # Read from PubSub
@@ -14,6 +12,6 @@ def pubsub_to_iot(event, context):
     # Load json
     message = json.loads(pubsub_message)
 
-    console.log('ME LLEGA MENSAJE EN LA FUNCION CLOUD: ', message)
+    console.log('ME LLEGA MENSAJE EN LA FUNCION CLOUD: %s', message)
     if message['status'] == 'salida':
         console.log("SALIDA")
