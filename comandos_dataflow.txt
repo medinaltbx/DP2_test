@@ -9,7 +9,6 @@ SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out
 source edem/bin/activate
 cd DP2_test/02_Dataflow/
 
-#~#~#~#~# DATAFLOW PREP #~#~#~#~#
 gcloud builds submit --tag 'gcr.io/dp2-test-342416/dataflow/edem:latest' .
 
 gcloud dataflow flex-template build "gs://iot-cloud-storage-test/dataflowtemplate.json" \
@@ -21,6 +20,9 @@ gcloud dataflow flex-template run "edem-dataflow-job" \
     --region "europe-west1"
 
 #~#~#~#~# IOT LAUNCH #~#~#~#~#
+
+cd ../01_IoTCore/
+
 python edemDeviceData.py \
     --algorithm RS256 \
     --cloud_region europe-west1 \
@@ -40,3 +42,4 @@ pandas
 google-cloud-logging
 google-cloud-bigquery
 datetime
+pyarrow

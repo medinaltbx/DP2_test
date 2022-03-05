@@ -10,7 +10,7 @@ import logging
 import pandas as pd
 
 # Read from PubSub
-def calculate_time():
+def calculate_time(event, context):
     client = google.cloud.logging.Client()
     client.setup_logging()
 
@@ -39,6 +39,7 @@ def calculate_time():
         """ READ BIGQUERY STATUS"""
         q = f"""SELECT * FROM {TABLE_READ} WHERE parking_id = '{message['parking_id']}' AND status = 'llegada'"""
         df = (client.query(q).result().to_dataframe())
+        print(q)
 
         """ GET LAST ARRIVAL """
         df['timeStamp'] = df['timeStamp'].apply(parse_time)
@@ -46,11 +47,14 @@ def calculate_time():
         arrival_time = df['timeStamp'].iloc[-1]
 
         ellapsed_time = departure_time - arrival_time
+        print('ELLAPSED: ', ellapsed_time)
 
         status = [{'parking_id': message['parking_id'],
                     'arrival_time': str(arrival_time),
                     'departure_time': str(departure_time),
                     'total_time': str(ellapsed_time)}]
+        print('############## TO UPLOAD: ##############', status)
+
         bq_client = bigquery.Client()
 
         table = bq_client.get_table(TABLE_DESTINATION)
