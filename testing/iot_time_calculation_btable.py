@@ -33,8 +33,7 @@ def update_status(data):
     f"total_time = '{data['total_time']}' " \
     f"WHERE parking_id = '{data['parking_id']}' AND arrival_time = '{data['arrival_time']}'"
     print(query)
-    # query_job = client.query((dml_statement))  # API request
-    # query_job.result()  # Waits for statement to finish
+
     client.query(query)
 
 def process_true(current_status, previous_status):

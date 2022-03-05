@@ -29,4 +29,10 @@ python edemDeviceData.py \
     --project_id dp2-test-342416 \
     --registry_id edemRegistry
 
+#~#~#~#~# BD SETUP #~#~#~#~#
+parking_id:STRING,
+arrival_time:STRING,
+departure_time:STRING,
+total_time:STRING
+
 

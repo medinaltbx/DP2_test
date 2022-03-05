@@ -33,8 +33,14 @@ def calculate_time():
     arrival_time = df['timeStamp'].iloc[-1]
 
     ellapsed_time = departure_time - arrival_time
-    print(ellapsed_time, str(ellapsed_time))
 
+    status = [{'parking_id': dc['parking_id'], 'arrival_time': str(arrival_time),
+                     'departure_time': str(departure_time), 'total_time': str(ellapsed_time)}]
+    bq_client = bigquery.Client()
+    table = bq_client.get_table(TABLE_DESTINATION)
+    errors = bq_client.insert_rows_json(table, status)
+    if errors == []:
+        print("success")
 
 
 calculate_time()
