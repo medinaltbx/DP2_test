@@ -2,7 +2,6 @@
 
 # Import Libraries
 
-import argparse
 import json
 import logging
 import time
@@ -14,7 +13,7 @@ from apache_beam.transforms.core import CombineGlobally
 import apache_beam.transforms.window as window
 from apache_beam.io.gcp.bigquery import parse_table_schema_from_json
 from apache_beam.io.gcp import bigquery_tools
-
+import datetime
 
 # ParseJson Function
 
@@ -28,15 +27,22 @@ def parse_json_message(message):
     attributes = message.attributes
 
     # Print through console and check that everything is fine.
-    logging.info("Receiving message from PubSub:%s", message)
+    logging.info("#~#~#~#~#~#~#~#~#~#~#~# Receiving message from PubSub:%s #~#~#~#~#~#~#~#~#~#~#~#", message)
     logging.info("with attributes: %s", attributes)
 
     # Convert string decoded in json format(element by element)
+
     row = json.loads(pubsubmessage)
+    logging.info(" ################ MENSAJITO json: %s ################: ", row)
 
     # Return function
     return row
 
+
+class parse_json(beam.DoFn):
+    def process(self, element):
+        output_json = json.dumps(element)
+        yield output_json.encode('utf-8')
 
 # class filter_departures(beam.DoFn):
 #     def process(self, element):
@@ -82,10 +88,13 @@ def edemData(output_table, project_id):
 
         # Part03: Filter and publish data
 
-        (data | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions", with_attributes=False))
+        (data
+            | "Parse JSON" >> beam.ParDo(parse_json())
+            | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions", with_attributes=False)
+         )
 
-        #(data 
-        #    #| "Filter messages" >> beam.Filter(lambda element: element['status'] == 'salida')
+        #(data
+        #    | "Filter messages" >> beam.Filter(lambda element: element['status'] == 'salida')
         #    | "WriteToPubSub" >> beam.io.WriteToPubSub(topic=f"projects/{project_id}/topics/iotToCloudFunctions",
         #                                                with_attributes=False)
         #)
