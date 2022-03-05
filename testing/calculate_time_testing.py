@@ -13,18 +13,17 @@ def calculate_time():
 
     # Construct a BigQuery client object.
     client = bigquery.Client()
-    job_config = bigquery.QueryJobConfig(destination=TABLE_DESTINATION)
 
-    dc = {'parking_id':'parking1','status':'salida','timeStamp':'2022-03-05 19:52:59.293516'}
+    message = {'parking_id':'parking1','status':'salida','timeStamp':'2022-03-05 19:52:59.293516'}
 
     def parse_time(timestamp):
         return datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
 
-    departure_time = parse_time(dc['timeStamp'])
+    departure_time = parse_time(message['timeStamp'])
     print(departure_time, type(departure_time))
 
     """ READ BIGQUERY STATUS"""
-    q = f"""SELECT * FROM {TABLE_READ} WHERE parking_id = '{dc['parking_id']}' AND status = 'llegada'"""
+    q = f"""SELECT * FROM {TABLE_READ} WHERE parking_id = '{message['parking_id']}' AND status = 'llegada'"""
     df = (client.query(q).result().to_dataframe())
 
     """ GET LAST ARRIVAL """
@@ -34,7 +33,7 @@ def calculate_time():
 
     ellapsed_time = departure_time - arrival_time
 
-    status = [{'parking_id': dc['parking_id'], 'arrival_time': str(arrival_time),
+    status = [{'parking_id': message['parking_id'], 'arrival_time': str(arrival_time),
                      'departure_time': str(departure_time), 'total_time': str(ellapsed_time)}]
     bq_client = bigquery.Client()
     table = bq_client.get_table(TABLE_DESTINATION)

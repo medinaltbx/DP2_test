@@ -35,4 +35,8 @@ arrival_time:STRING,
 departure_time:STRING,
 total_time:STRING
 
-
+#~#~#~#~# REQUIREMENTS #~#~#~#~#
+pandas
+google-cloud-logging
+google-cloud-bigquery
+datetime
