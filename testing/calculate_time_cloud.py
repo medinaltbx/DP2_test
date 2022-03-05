@@ -57,3 +57,5 @@ def calculate_time():
         errors = bq_client.insert_rows_json(table, status)
         if errors == []:
             logging.info(" #~#~#~#~#~#~# SUCCESS #~#~#~#~#~#~#")
+        else:
+            logging.info(" #~#~#~#~#~#~# FALLO #~#~#~#~#~#~#")
