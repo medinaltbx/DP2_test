@@ -5,6 +5,10 @@ bucket_name = iot-cloud-storage-test
 #~#~#~#~# IOT BINDING #~#~#~#~#
 SSH KEY = openssl req -x509 -nodes -newkey rsa:2048 -keyout rsa_private.pem -out rsa_cert.pem -subj "/CN=unused"
 
+#~#~#~#~# LOGGING #~#~#~#~#
+source edem/bin/activate
+cd DP2_test/02_Dataflow/
+
 #~#~#~#~# DATAFLOW PREP #~#~#~#~#
 gcloud builds submit --tag 'gcr.io/dp2-test-342416/dataflow/edem:latest' .
 
@@ -16,6 +20,7 @@ gcloud dataflow flex-template run "edem-dataflow-job" \
     --template-file-gcs-location "gs://iot-cloud-storage-test/dataflowtemplate.json" \
     --region "europe-west1"
 
+#~#~#~#~# IOT LAUNCH #~#~#~#~#
 python edemDeviceData.py \
     --algorithm RS256 \
     --cloud_region europe-west1 \
@@ -24,13 +29,4 @@ python edemDeviceData.py \
     --project_id dp2-test-342416 \
     --registry_id edemRegistry
 
-#~#~#~#~# DATAFLOW PREP V2 #~#~#~#~#
-gcloud builds submit --tag 'gcr.io/dp2-test-342416/dataflow/edem:latest' .
 
-gcloud dataflow flex-template build "gs://iot-cloud-storage-test/dataflowtemplate2.json" \
-  --image "gcr.io/dp2-test-342416/dataflow/edem:latest" \
-  --sdk-language "PYTHON"
-
-gcloud dataflow flex-template run "edem-dataflow-job2" \
-    --template-file-gcs-location "gs://iot-cloud-storage-test/dataflowtemplate2.json" \
-    --region "europe-west1"
