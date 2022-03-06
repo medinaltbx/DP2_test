@@ -2,6 +2,7 @@
 # When a temperature over 23ºC or under 17ºC is received, a IoT Core command will be throw.
 
 # Import libraries
+import random
 from datetime import datetime
 from google.cloud import bigquery
 import base64, json, sys, os
@@ -24,22 +25,20 @@ def calculate_time(event, context):
     logging.debug(message)
 
     if message['status'] == 'salida':
+        print('MESSAge: ', message)
         TABLE_READ = "`dp2-test-342416.edemDataset.iotToBigQuery`"
         TABLE_DESTINATION ="dp2-test-342416.edemDataset.status"
-
-        # Construct a BigQuery client object.
-        client = bigquery.Client()
 
         def parse_time(timestamp):
             return datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
 
         departure_time = parse_time(message['timeStamp'])
-        print(departure_time, type(departure_time))
 
+        # Construct a BigQuery client object.
+        client = bigquery.Client()
         """ READ BIGQUERY STATUS"""
         q = f"""SELECT * FROM {TABLE_READ} WHERE parking_id = '{message['parking_id']}' AND status = 'llegada'"""
         df = (client.query(q).result().to_dataframe())
-        print(q)
 
         """ GET LAST ARRIVAL """
         df['timeStamp'] = df['timeStamp'].apply(parse_time)
@@ -47,13 +46,16 @@ def calculate_time(event, context):
         arrival_time = df['timeStamp'].iloc[-1]
 
         ellapsed_time = departure_time - arrival_time
-        print('ELLAPSED: ', ellapsed_time)
+        precio = random.uniform(1.5, 1.9)
 
         status = [{'parking_id': message['parking_id'],
                     'arrival_time': str(arrival_time),
                     'departure_time': str(departure_time),
-                    'total_time': str(ellapsed_time)}]
-        print('############## TO UPLOAD: ##############', status)
+                    'total_time': str(ellapsed_time),
+                    'combustible':message['combustible'],
+                    'marca':message['marca'],
+                    'matricula':message['matricula'],
+                    'precio':precio}]
 
         bq_client = bigquery.Client()
 

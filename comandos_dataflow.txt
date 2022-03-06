@@ -35,13 +35,20 @@ python edemDeviceData.py \
 # IotToBigQuery
 parking_id:STRING,
 timeStamp:STRING,
-status:STRING
+status:STRING,
+combustible:STRING,
+marca:STRING,
+matricula:STRING
 
 # STATUS
 parking_id:STRING,
 arrival_time:STRING,
 departure_time:STRING,
-total_time:STRING
+total_time:STRING,
+combustible:STRING,
+marca:STRING,
+matricula:STRING,
+precio:FLOAT
 
 #~#~#~#~# REQUIREMENTS #~#~#~#~#
 pandas
