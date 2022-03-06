@@ -32,6 +32,12 @@ python edemDeviceData.py \
     --registry_id edemRegistry
 
 #~#~#~#~# BD SETUP #~#~#~#~#
+# IotToBigQuery
+parking_id:STRING,
+timeStamp:STRING,
+status:STRING
+
+# STATUS
 parking_id:STRING,
 arrival_time:STRING,
 departure_time:STRING,
